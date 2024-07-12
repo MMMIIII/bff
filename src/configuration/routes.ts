@@ -1,3 +1,3 @@
 export const ROUTES = {
-  itsfitness: 'itsfitness'
-}
+  itsfitness: 'itsfitness',
+};

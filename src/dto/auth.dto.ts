@@ -1,5 +1,4 @@
-import { IsString } from "class-validator";
-
+import { IsString } from 'class-validator';
 
 export class AuthCodeDto {
   @IsString()
@@ -10,6 +9,6 @@ export class AuthCreateTokenDto {
   @IsString()
   readonly destination: string;
 
-  @IsString() 
+  @IsString()
   readonly code: string;
 }

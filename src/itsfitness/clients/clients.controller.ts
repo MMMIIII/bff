@@ -1,7 +1,7 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { ROUTES } from 'src/configuration/routes';
 import { ClientsService } from './clients.service';
-import { getToken } from 'src/common/utils/getToken';
+import { getToken } from 'src/common/getToken';
 
 @Controller(`${ROUTES.itsfitness}/clients`)
 export class ClientsController {
@@ -10,6 +10,6 @@ export class ClientsController {
   @Get()
   getProfile(@Req() request: Request) {
     const token = getToken(request);
-    return this.clientsService.getProfile(token); 
+    return this.clientsService.getProfile(token);
   }
 }

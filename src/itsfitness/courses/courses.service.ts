@@ -12,7 +12,7 @@ export class CoursesService {
     const config: AxiosRequestConfig = {
       httpsAgent: new https.Agent({ rejectUnauthorized: false }),
     };
-    
+
     return this.httpServise
       .get('https://test-fitlar.flagsoft.ru/api/v1/courses', config)
       .pipe(map((response) => response.data));
