@@ -2,11 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { Observable, catchError, map } from 'rxjs';
 import { requestConfig } from 'src/configuration/requestConfiguration';
-import { HandleHttpError } from 'src/common/errorHandler';
+import { GeneralException } from 'src/common/exceptions/general.exception';
 @Injectable()
 export class AuthService {
-  private readonly handleHttpError = new HandleHttpError();
-
   constructor(private readonly httpServise: HttpService) {}
 
   getCode(destination: string): Observable<string> {
@@ -18,9 +16,9 @@ export class AuthService {
       )
       .pipe(
         map((response) => response.data),
-        catchError(
-          async (error) => await this.handleHttpError.handleHttpError(error),
-        ),
+        catchError((error) => {
+          throw new GeneralException(error);
+        }),
       );
   }
 
@@ -33,9 +31,9 @@ export class AuthService {
       )
       .pipe(
         map((response) => response.data),
-        catchError(
-          async (error) => await this.handleHttpError.handleHttpError(error),
-        ),
+        catchError((error) => {
+          throw new GeneralException(error);
+        }),
       );
   }
 }

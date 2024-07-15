@@ -1,25 +1,20 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { catchError, map } from 'rxjs';
-import { HandleHttpError } from 'src/common/errorHandler';
-import { requestConfigWithToken } from 'src/configuration/requestConfiguration';
+import { GeneralException } from 'src/common/exceptions/general.exception';
 
 @Injectable()
 export class ClientsService {
-  private readonly handleHttpError = new HandleHttpError();
   constructor(private readonly httpServise: HttpService) {}
 
-  getProfile(token: string) {
+  getProfile() {
     return this.httpServise
-      .get(
-        `${process.env.URL_ITSFITNESS}/v1/clients`,
-        requestConfigWithToken(token),
-      )
+      .get(`${process.env.URL_ITSFITNESS}/v1/clients`)
       .pipe(
         map((response) => response.data),
-        catchError(
-          async (error) => await this.handleHttpError.handleHttpError(error),
-        ),
+        catchError((error) => {
+          throw new GeneralException(error);
+        }),
       );
   }
 }
