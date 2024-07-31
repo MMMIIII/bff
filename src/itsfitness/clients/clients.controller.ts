@@ -1,8 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { ROUTES } from 'src/configuration/routes';
 import { ClientsService } from './clients.service';
+import { Auth } from 'src/common/decorators/auth.decorator';
 
-@Controller(`${ROUTES.itsfitness}/clients`)
+@Controller(`clients`)
+@Auth()
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 

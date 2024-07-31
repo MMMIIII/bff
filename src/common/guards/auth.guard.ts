@@ -9,8 +9,9 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const token = request.headers.authorization;
-    if (!token) throw new UnauthorizedException();
+    const token: string = request.headers.authorization;
+
+    if (!token || !token.includes('Bearer')) throw new UnauthorizedException();
 
     return true;
   }

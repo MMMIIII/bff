@@ -6,6 +6,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { RequestUid } from 'src/common/uid/decorators/request-uid.decorator';
 import { Auth } from 'src/common/decorators/auth.decorator';
+import { UseCache } from 'src/common/decorators/cache.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -16,6 +17,7 @@ export class AuthController {
 
   @Post('code')
   @Auth()
+  @UseCache('holl', 200)
   getCode(
     @Body() authCodeDto: AuthCodeDto,
     @RequestUid() uid: string,

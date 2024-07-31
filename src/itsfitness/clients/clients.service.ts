@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { catchError, map } from 'rxjs';
-import { GeneralException } from 'src/common/exceptions/general.exception';
+import { map } from 'rxjs';
+// import { GeneralException } from 'src/common/exceptions/general.exception';
 
 @Injectable()
 export class ClientsService {
@@ -10,11 +10,6 @@ export class ClientsService {
   getProfile() {
     return this.httpServise
       .get(`${process.env.URL_ITSFITNESS}/v1/clients`)
-      .pipe(
-        map((response) => response.data),
-        catchError((error) => {
-          throw new GeneralException(error);
-        }),
-      );
+      .pipe(map((response) => response.data));
   }
 }
