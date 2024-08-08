@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Observable, catchError, map } from 'rxjs';
-import { requestConfig } from 'src/configuration/requestConfiguration';
+import { requestConfig } from '../configuration/requestConfiguration';
 import { GeneralException } from 'src/common/exceptions/general.exception';
 @Injectable()
 export class AuthService {
