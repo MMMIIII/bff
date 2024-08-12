@@ -1,20 +1,53 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { AxiosRequestConfig } from 'axios';
-import { Observable, map } from 'rxjs';
-import * as https from 'https';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Observable, catchError, map } from 'rxjs';
+import { requestConfig } from 'src/configuration/requestConfiguration';
+import { GeneralException } from 'src/common/exceptions/general.exception';
+import { City, Courses } from 'src/dto/coureses.dto';
 
 @Injectable()
 export class CoursesService {
   constructor(private readonly httpServise: HttpService) {}
 
-  getCourses(): Observable<any> {
-    const config: AxiosRequestConfig = {
-      httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-    };
-
+  getCourses(): Observable<Courses[]> {
     return this.httpServise
-      .get('https://test-fitlar.flagsoft.ru/api/v1/courses', config)
-      .pipe(map((response) => response.data));
+      .get(`${process.env.URL_ITSFITNESS}/v1/courses`, requestConfig)
+      .pipe(
+        map((response) => response.data),
+        catchError((error) => {
+          throw new GeneralException(
+            error.response.data.data.errors,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        }),
+      );
+  }
+
+  getCities(): Observable<City[]> {
+    return this.httpServise
+      .get(`${process.env.URL_ITSFITNESS}/v1/courses/cities`, requestConfig)
+      .pipe(
+        map((response) => response.data),
+        catchError((error) => {
+          throw new GeneralException(
+            error.response.data.data.errors,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        }),
+      );
+  }
+
+  getTags(): Observable<any[]> {
+    return this.httpServise
+      .get(`${process.env.URL_ITSFITNESS}/v1/courses/tags`, requestConfig)
+      .pipe(
+        map((response) => response.data),
+        catchError((error) => {
+          throw new GeneralException(
+            error.response.data.data.errors,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        }),
+      );
   }
 }

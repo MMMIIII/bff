@@ -5,9 +5,10 @@ import { Observable } from 'rxjs';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { RequestUid } from 'src/common/uid/decorators/request-uid.decorator';
-import { Auth } from 'src/common/decorators/auth.decorator';
-import { UseCache } from 'src/common/decorators/cache.decorator';
-
+import { ApiTags } from '@nestjs/swagger';
+import { code, token } from 'src/swagger/auth.docs';
+import { Swagger } from 'src/swagger/common.docs';
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -16,8 +17,7 @@ export class AuthController {
   ) {}
 
   @Post('code')
-  @Auth()
-  @UseCache('holl', 200)
+  @Swagger(code)
   getCode(
     @Body() authCodeDto: AuthCodeDto,
     @RequestUid() uid: string,
@@ -29,6 +29,7 @@ export class AuthController {
   }
 
   @Post('token')
+  @Swagger(token)
   createToken(@Body() authCreateTokenDto: AuthCreateTokenDto) {
     const { destination, code } = authCreateTokenDto;
     return this.authService.createToken(destination, code);
