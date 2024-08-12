@@ -8,6 +8,9 @@ import { RequestUid } from 'src/common/uid/decorators/request-uid.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { code, token } from 'src/swagger/auth.docs';
 import { Swagger } from 'src/swagger/common.docs';
+// import { Auth } from 'src/common/decorators/auth.decorator';
+// import { UseCache } from 'src/common/decorators/cache.decorator';
+
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -24,7 +27,9 @@ export class AuthController {
   ): Observable<string> {
     const { destination } = authCodeDto;
 
-    this.logger.info('Отправка кода на почту', { destination, uid });
+    if (process.env.NODE_ENV !== 'auto-test') {
+      this.logger.info('Отправка кода на почту', { destination, uid });
+    }
     return this.authService.getCode(destination);
   }
 
