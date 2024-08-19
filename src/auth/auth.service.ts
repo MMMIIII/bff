@@ -1,47 +1,55 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { Observable, catchError, map } from 'rxjs';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { firstValueFrom, map } from 'rxjs';
 import { requestConfig } from '../configuration/requestConfiguration';
-import { GeneralException } from 'src/common/exceptions/general.exception';
+import { IResponseDto } from 'src/types/common.interface';
+import {
+  IResAuthCodeDto,
+  IResAuthTokenDto,
+} from 'src/types/auth/auth.interface';
+
 @Injectable()
 export class AuthService {
   constructor(private readonly httpServise: HttpService) {}
 
-  getCode(destination: string): Observable<string> {
-    return this.httpServise
-      .post(
-        `${process.env.URL_ITSFITNESS}/v1/auth/code`,
-        { destination },
-        requestConfig,
-      )
-      .pipe(
-        map((response) => {
-          return response.data;
-        }),
-        catchError((error) => {
-          throw new GeneralException(
-            error.response.data.data.errors,
-            HttpStatus.UNPROCESSABLE_ENTITY,
-          );
-        }),
+  async getCode(
+    destination: string,
+  ): Promise<IResponseDto<IResAuthCodeDto>['data']> {
+    try {
+      const response: IResponseDto<IResAuthCodeDto> = await firstValueFrom(
+        this.httpServise
+          .post(
+            `${process.env.URL_ITSFITNESS}/v1/auth/code`,
+            { destination },
+            requestConfig,
+          )
+          .pipe(
+            map((response) => {
+              return response.data;
+            }),
+          ),
       );
+      return response.data;
+    } catch (error) {
+      throw new UnprocessableEntityException(error.response.data.data.errors);
+    }
   }
 
-  createToken(destination: string, code: number): Observable<any> {
-    return this.httpServise
-      .post(
-        `${process.env.URL_ITSFITNESS}/v1/auth/token`,
-        { destination, code },
-        requestConfig,
-      )
-      .pipe(
-        map((response) => response.data),
-        catchError((error) => {
-          throw new GeneralException(
-            error.response.data.data.errors,
-            HttpStatus.UNPROCESSABLE_ENTITY,
-          );
-        }),
+  async createToken(
+    destination: string,
+    code: number,
+  ): Promise<IResponseDto<IResAuthTokenDto>['data']> {
+    try {
+      const response: IResponseDto<IResAuthTokenDto> = await firstValueFrom(
+        this.httpServise.post(
+          `${process.env.URL_ITSFITNESS}/v1/auth/token`,
+          { destination, code },
+          requestConfig,
+        ),
       );
+      return response.data;
+    } catch (error) {
+      throw new UnprocessableEntityException(error.response.data.data.errors);
+    }
   }
 }

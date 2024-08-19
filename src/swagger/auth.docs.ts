@@ -1,13 +1,13 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { AuthCodeDto, AuthCreateTokenDto } from 'src/dto/auth.dto';
+import { ReqAuthCodeDto, ReqAuthCreateTokenDto } from 'src/dto/auth.dto';
 
 export function code() {
   return applyDecorators(
     ApiResponse({
       status: HttpStatus.OK,
       description: 'Код сгенерирован и отправлен на почту / смс',
-      type: AuthCodeDto,
+      type: ReqAuthCodeDto,
       example: {
         status: HttpStatus.OK,
         data: {
@@ -19,7 +19,7 @@ export function code() {
       status: HttpStatus.UNPROCESSABLE_ENTITY,
       description:
         'Строка, которую ввели, является пустой или не является ни номером телефона',
-      type: AuthCodeDto,
+      type: ReqAuthCodeDto,
       example: {
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         data: {
@@ -40,7 +40,7 @@ export function token() {
     ApiResponse({
       status: HttpStatus.OK,
       description: 'Код подошёл, сгенерирован OAuth2 Bearer токен',
-      type: AuthCreateTokenDto,
+      type: ReqAuthCreateTokenDto,
       example: {
         status: HttpStatus.OK,
         data: {
@@ -54,7 +54,7 @@ export function token() {
       status: HttpStatus.UNPROCESSABLE_ENTITY,
       description:
         'Строка, которую ввели, является пустой или не является ни номером телефона',
-      type: AuthCodeDto,
+      type: ReqAuthCreateTokenDto,
       example: {
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         data: {

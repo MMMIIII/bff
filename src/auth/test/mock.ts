@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker';
-import { AuthCodeDto, AuthCreateTokenDto } from 'src/dto/auth.dto';
+import { ReqAuthCodeDto, ReqAuthCreateTokenDto } from 'src/dto/auth.dto';
 
-export const token: AuthCreateTokenDto = {
+export const token: ReqAuthCreateTokenDto = {
   destination: faker.internet.email(),
   code: faker.number.int({ min: 4, max: 4 }),
 };
 
-export const code: AuthCodeDto = {
+export const code: ReqAuthCodeDto = {
   destination: faker.internet.email(),
 };

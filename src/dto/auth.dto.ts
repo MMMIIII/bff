@@ -6,14 +6,14 @@ import { IsNotEmpty } from 'src/common/decorators/validation/isNotEmpty';
 import { IsNumber } from 'src/common/decorators/validation/isNumber';
 import { IsLengthRangeErrorMessage } from 'src/types/validation/isLengthRange.type';
 
-export class AuthCodeDto {
+export class ReqAuthCodeDto {
   @ApiProperty()
   @IsNotEmpty({ groups: ['destination'] })
   @isDestination({ groups: ['destination'] })
   readonly destination: string;
 }
 
-export class AuthCreateTokenDto {
+export class ReqAuthCreateTokenDto {
   @ApiProperty()
   @IsNotEmpty({ groups: ['destination'] })
   @IsEmail({ groups: ['destination'] })
